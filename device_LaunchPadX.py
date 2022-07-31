@@ -1,5 +1,4 @@
 # name=Novation Launchpad X
-# https://forum.image-line.com/viewtopic.php?f=1994&t=228184 MODIFIED TO WORK WITH X BY DDOne ("DDOne" on Image-Line Forums)
 # Version 1.0
 import patterns
 import mixer
@@ -182,7 +181,7 @@ class TLaunchPadPro():
 
 
 	def OnMidiIn(self, event):
-		print ('\nOnMidiIn func', event.status )
+		# print ('\nOnMidiIn func', event.status )
 		if event.status == midi.MIDI_BEGINSYSEX:
 			# print ('midi in sysex', len(event.sysex), event.sysex[0], event.sysex[1], event.sysex[2], event.sysex[3], event.sysex[4], event.sysex[5], event.sysex[6], event.sysex[7], event.sysex[8], event.sysex[9]) #, event.sysex[10], event.sysex[11], event.sysex[12], event.sysex[13], event.sysex[14], event.sysex[15], event.sysex[16])
 			#layout change
@@ -208,7 +207,7 @@ class TLaunchPadPro():
 
 	def OnMidiMsg(self, event):
 		#print('\n\nOnMidiMsg func')
-		print (event.status, event.data1, event.data2)
+		# print (event.status, event.data1, event.data2)
 		ColT = (0x000000, 0x2F0018 | LPBlink2)
 
 		if event.midiChan > 0:
@@ -381,9 +380,9 @@ class TLaunchPadPro():
 
 
 		elif event.midiId in [midi.MIDI_NOTEON, midi.MIDI_NOTEOFF, midi.MIDI_CONTROLCHANGE]: #All but Note, Custom, Capture MiDI
-			print('\nOnMidiMsg - SESSION ?? event.midiId in [midi.MIDI_NOTEON:   _NoteON:', event.midiId == midi.MIDI_NOTEON,'_NoteOFF:',event.midiId == midi.MIDI_NOTEOFF,'_ControlCHANGE:',event.midiId == midi.MIDI_CONTROLCHANGE)
+			# print('\nOnMidiMsg - SESSION ?? event.midiId in [midi.MIDI_NOTEON:   _NoteON:', event.midiId == midi.MIDI_NOTEON,'_NoteOFF:',event.midiId == midi.MIDI_NOTEOFF,'_ControlCHANGE:',event.midiId == midi.MIDI_CONTROLCHANGE)
 			if event.midiId == midi.MIDI_NOTEOFF:
-				print('OnMidiMsg - SESSION event.midiId == midi.MIDI_NOTEOFF')
+				# print('OnMidiMsg - SESSION event.midiId == midi.MIDI_NOTEOFF')
 				event.data2 = 0
 			elif (self.BtnT[Btn_VelLock] > 0) & (event.data2 > 0):
 				#print('OnMidiMsg - SESSION (self.BtnT[Btn_VelLock] > 0) & (even')
@@ -532,7 +531,7 @@ class TLaunchPadPro():
 
 
 			elif (event.data1 == Btn_CapMidi):  #------> Left/Right Column Toggle
-				print('\nOnMidiMsg - column toggle LR event.data1 == Btn_CapMidi')
+				# print('\nOnMidiMsg - column toggle LR event.data1 == Btn_CapMidi')
 				# event.handled = True
 				# if (event.pmeFlags & midi.PME_System != 0):
 				# 	if event.data2 > 0:
@@ -696,7 +695,7 @@ class TLaunchPadPro():
 	def OnMidiOutMsg(self, event):
 		#print('\n\nOnMidiOutMsg func')
 
-		print (event.status, event.data1, event.data2)
+		# print (event.status, event.data1, event.data2)
 		event.handled = True
 		ID = event.midiId
 		n = 0
@@ -1240,10 +1239,10 @@ def OnUpdateLiveMode(LastTrackNum):
 def OnMidiIn(event):
 	#print('\n\nBEGIN-----')
 	data = event.data1
-	print('presssed w event:',dir(event))
-	print('presssed w data1:', data, '  -->', hex(data))
-	if data  == Btn_Up:
-		print('presssed Btn_Up')
+	# print('presssed w event:',dir(event))
+	# print('presssed w data1:', data, '  -->', hex(data))
+	# if data  == Btn_Up:
+	# 	print('presssed Btn_Up')
 	# elif data == Btn_Down:
 		#print('presssed Btn_Down')
 	# elif data == Btn_Left:
@@ -1268,18 +1267,18 @@ def OnMidiIn(event):
 		#print('presssed Btn_Btn_SendA')
 	# elif data == Btn_SendB:
 		#print('presssed Btn_SendB')
-	elif data == Btn_StopClip:
-		transport.start()
+	# elif data == Btn_StopClip:
+	# 	transport.start()
 		# event.handled = True
-		ui.setHintMsg("Playback staaarteeeed!")
+		# ui.setHintMsg("Playback staaarteeeed!")
 
-		print('presssed Btn_StopClip')
-	elif data == Btn_Mute:
-		transport.stop()
+	# 	print('presssed Btn_StopClip')
+	# elif data == Btn_Mute:
+	# 	transport.stop()
 		# event.handled = True
-		ui.setHintMsg("Playback stoooopped!")
+		# ui.setHintMsg("Playback stoooopped!")
 
-		print('presssed Btn_Mute')
+		# print('presssed Btn_Mute')
 	# elif data == Btn_Solo:
 		#print('presssed Btn_Solo')
 	# elif data == Btn_RecordArm:
