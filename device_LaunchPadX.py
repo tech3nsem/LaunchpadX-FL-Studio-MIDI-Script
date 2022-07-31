@@ -337,7 +337,7 @@ class TLaunchPadPro():
 				else:
 					# pierre : per clip aftertouch, if defined for that item in the custom page
 					event.midiChan = 15					
-					event.data1 = launchMapPages.getMapItemAftertouch(-ClipOfs - 2, x2)
+					event.data1 = launchMapPages.getMapItemAftertouch(-self.ClipOfs - 2, x2)
 			else:
 				event.midiChan = 0
 				# clips: 1 per track
@@ -367,7 +367,7 @@ class TLaunchPadPro():
 			for n in range(1, len(BtnInfo)):
 				# print('\nOnMidiMsg - SESSION LOOP rolling')
 				if BtnInfo[n].Num == x:
-					print('OnMidiMsg - SESSION 00 BtnInfo[n].Num == x')
+					print('OnMidiMsg - SESSION 00 BtnInfo[n].Num == x:',x)
 					event.handled = True
 					m2 = self.BtnT[n]
 					if (m2 >= 2) & (event.data2 > 0):
@@ -557,40 +557,40 @@ class TLaunchPadPro():
 					self.SetBtn(Btn_Overview, 0)
 				event.handled = True
 			else:
-				print('\nOnMidiMsg - Overview PICK else')
+				print('\nOnMidiMsg - Overview PICK else 00')
 				if self.ClipOfs < -1:
-					print('OnMidiMsg - Overview PICK else - custom pg')
+					print('OnMidiMsg - Overview PICK else 001 - custom pg')
 					# custom pages
 					x2 = y * LayW + x
 					m = -self.ClipOfs - 2
 					if x2 <= launchMapPages.getMapCount(m):
-						print('OnMidiMsg - Overview PICK x2<= launchmappages')
+						print('OnMidiMsg - Overview PICK 0010 x2<= launchmappages')
 						o = launchMapPages.getMapItemChannel(m, x2)
 						if o > -128:
-							print('OnMidiMsg - Overview PICK else > -128')
+							print('OnMidiMsg - Overview PICK else 00100 > -128')
 							m2 = event.data2
 							if (m2 == 0) & (self.BtnT[Btn_ScenePlus] > 0):
-								print('OnMidiMsg - Overview PICK m2 === 0 & Btn_sceneplus')
+								print('OnMidiMsg - Overview PICK 001000 m2 === 0 & Btn_sceneplus')
 								m2 = -MaxInt # user1=hold
 							launchMapPages.processMapItem(event, m, x2, m2)
 				else:
-					print('OnMidiMsg - Overview PICK else NOT custom pg')
+					print('OnMidiMsg - Overview PICK else 002 NOT custom pg')
 					if self.ClipOfs >= 0:
-						print('OnMidiMsg - Overview PICK else 1st change')
+						print('OnMidiMsg - Overview PICK else 0020 1st change')
 						# first chance
 						launchMapPages.processMapItem(event, -1, y * PadsW + x, event.data2)
 						self.ClipOfsPerfomance = self.ClipOfs
 						if event.handled:
-							print('OnMidiMsg - Overview PICK else handled')
+							print('OnMidiMsg - Overview PICK else 00201 handled')
 							return
 
 					if (event.pmeFlags & midi.PME_System_Safe != 0):
-						print('OnMidiMsg - Overview PICK else event.pmeFlags & midi.PME_System_Safe != 0)')
+						print('OnMidiMsg - Overview PICK else 0021 event.pmeFlags & midi.PME_System_Safe != 0)')
 						x2 = x
 						y2 = y + self.TrackOfs + 1
 						if self.ClipOfs >= 0:
 							if event.data2 > 0:
-								print('OnMidiMsg - Overview PICK else lunch clip')
+								print('OnMidiMsg - Overview PICK else 002101 lunch clip')
 								# clip launch
 								m = midi.TLC_MuteOthers | midi.TLC_Fill
 								if y >= SceneY:
@@ -606,7 +606,7 @@ class TLaunchPadPro():
 								if self.BtnT[Btn_Queue] > 0:
 									m = m | midi.TLC_Queue
 								if self.BtnT[Btn_Snap] > 0:
-									m = m | TLC_GlobalSnap # snap
+									m = m | midi.TLC_GlobalSnap # snap
 								if self.BtnT[Btn_ScenePlus] | (self.BtnT[Btn_Scene] > 0):
 									m = m | midi.TLC_ColumnMode # column mode
 									if self.BtnT[Btn_ScenePlus] == 0:
