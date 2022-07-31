@@ -1,5 +1,5 @@
 # name=Novation Launchpad X
-# https://forum.image-line.com/viewtopic.php?f=1994&t=228184 MODIFIED TO WORK WITH X BY MiLO83 ("MiLO1983" on Image-Line Forums)
+# https://forum.image-line.com/viewtopic.php?f=1994&t=228184 MODIFIED TO WORK WITH X BY DDOne ("DDOne" on Image-Line Forums)
 # Version 1.0
 import patterns
 import mixer
@@ -353,9 +353,9 @@ class TLaunchPadPro():
 			return
 
 		elif event.midiId in [midi.MIDI_NOTEON, midi.MIDI_NOTEOFF, midi.MIDI_CONTROLCHANGE]: #All but Note, Custom, Capture MiDI
-			#print('\nOnMidiMsg - SESSION ?? event.midiId in [midi.MIDI_NOTEON:   _NoteON:', event.midiId == midi.MIDI_NOTEON,'_NoteOFF:',event.midiId == midi.MIDI_NOTEOFF,'_ControlCHANGE:',event.midiId == midi.MIDI_CONTROLCHANGE)
+			print('\nOnMidiMsg - SESSION ?? event.midiId in [midi.MIDI_NOTEON:   _NoteON:', event.midiId == midi.MIDI_NOTEON,'_NoteOFF:',event.midiId == midi.MIDI_NOTEOFF,'_ControlCHANGE:',event.midiId == midi.MIDI_CONTROLCHANGE)
 			if event.midiId == midi.MIDI_NOTEOFF:
-				#print('OnMidiMsg - SESSION event.midiId == midi.MIDI_NOTEOFF')
+				print('OnMidiMsg - SESSION event.midiId == midi.MIDI_NOTEOFF')
 				event.data2 = 0
 			elif (self.BtnT[Btn_VelLock] > 0) & (event.data2 > 0):
 				#print('OnMidiMsg - SESSION (self.BtnT[Btn_VelLock] > 0) & (even')
@@ -1151,7 +1151,50 @@ def OnUpdateLiveMode(LastTrackNum):
 def OnMidiIn(event):
 	#print('\n\nBEGIN-----')
 	data = event.data1
-	#print('presssed w data1:', data, '  -->', hex(data))
+	print('presssed w event:',dir(event))
+	print('presssed w data1:', data, '  -->', hex(data))
+	if data  == Btn_Up:
+		print('presssed Btn_Up')
+	# elif data == Btn_Down:
+		#print('presssed Btn_Down')
+	# elif data == Btn_Left:
+		#print('presssed Btn_Left')
+	# elif data == Btn_Right:
+		#print('presssed Btn_Right')
+	# elif data == Btn_Session:
+		#print('presssed Btn_Session')
+	# elif data == Btn_Note:
+		#print('presssed Btn_Note')
+	# elif data == Btn_Custom:
+		#print('presssed Btn_Custom')
+	# elif data == Btn_CapMidi:
+		#print('presssed Btn_CapMidi')
+	# elif data == Btn_SpareHex:
+		#print('presssed Btn_SpareHex')
+	# elif data == Btn_Volume:
+		#print('presssed Btn_Volume')
+	# elif data == Btn_Pan:
+		#print('presssed Btn_Pan')
+	# elif data == Btn_SendA:
+		#print('presssed Btn_Btn_SendA')
+	# elif data == Btn_SendB:
+		#print('presssed Btn_SendB')
+	elif data == Btn_StopClip:
+		transport.start()
+		# event.handled = True
+		ui.setHintMsg("Playback staaarteeeed!")
+
+		print('presssed Btn_StopClip')
+	elif data == Btn_Mute:
+		transport.stop()
+		# event.handled = True
+		ui.setHintMsg("Playback stoooopped!")
+
+		print('presssed Btn_Mute')
+	# elif data == Btn_Solo:
+		#print('presssed Btn_Solo')
+	# elif data == Btn_RecordArm:
+		#print('presssed Btn_RecordArm')
 	# #print('getting midiooo:',event)
 	# #print('controlNum:',event.controlNum)
 	# #print('controlVal:',event.controlVal)

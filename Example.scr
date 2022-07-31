@@ -1,0 +1,24 @@
+' format: source MIDI note number, destination channel + command/note/knob, destination command/note/knob, velocity/knob value (0..127, or float), off color, on color
+
+' destination channel format:
+' -1: transport command
+' 0..15: note (off if velocity=0)
+' 16..31: absolute knob 
+' 32..47: relative knob (offset in value)
+
+' see Launchpad manual for note numbers & colors
+
+
+' exemple 1: first pad mapped to C5 in MIDI channel 0, default velocity, red
+0,0,60,100,1,3
+
+
+' exemple 2: second pad mapped to play, green
+1,-1,10,0,48,16
+
+' exemple 3: third pad mapped to absolute knob, value 25%, yellow
+2,16,0,32,17,51
+
+
+' exemple 4: fourth pad mapped to relative knob, increment speed -25% (average), yellow
+3,32,1,-32,17,51
