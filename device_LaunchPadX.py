@@ -94,14 +94,14 @@ LPBlinkMask = 0xFF << LPBlinkShift
 
 class TBtnInfo():
 	def __init__(self, Id, Num, Flags, Col):
-		print('\nTBtnInfo func')
+		#print('\nTBtnInfo func')
 		self.Id = Id
 		self.Num = Num
 		self.Flags = Flags
 		self.Col = Col  # off, on, held
 
 	def GetYX(self):
-		print('GetYX func')
+		#print('GetYX func')
 		return utils.DivModU(self.Num, PadsW)
 
 BtnInfo = [TBtnInfo(Btn_Snap, 3, 0 ,(0x040404, 0x3F3F3F, 0x000000)), TBtnInfo(Btn_ScenePlus, 8 ,1 ,(0x020000, 0x1C0000 | LPBlink4, 0x3F0A00)), TBtnInfo(Btn_Scene, 7, 1, (0x020000, 0x1C0000 | LPBlink4, 0x3F0A00)), TBtnInfo(Btn_Queue, 6, 1, (0x000100, 0x000A00 | LPBlink4, 0x002C10)), TBtnInfo(Btn_Overview, 5, 1 ,(0x000004, 0x000020 | LPBlink4, 0x00023F)), TBtnInfo(Btn_Spare, 6, 0, (0x040404, 0x3F3F3F, 0x000000)), TBtnInfo(Btn_Play, 70, 0, (0, 0, 0)), TBtnInfo(Btn_Stop, 80, 0, (0x000200, 0x001C00, 0x000000)), TBtnInfo(Btn_TapTempo, 30, 0, (0x000102, 0x00163F, 0x000000)), TBtnInfo(Btn_TempoNudgePlus, 40, 0, (0x000102, 0x00163F | LPBlink4, 0x000000)), TBtnInfo(Btn_TempoNudgeMin, 50, 0, (0x000102, 0x00163F | LPBlink4, 0x000000)), TBtnInfo(Btn_VelLock, 60, 1, (0x020001, 0x1C0010 | LPBlink4, 0x3F0A20)), TBtnInfo(Btn_Drums, 96, 1, (0x020001, 0x1C0010 | LPBlink4, 0x3F0A20)), TBtnInfo(Btn_Keys, 97, 1, (0x020001, 0x1C0010 | LPBlink4, 0x3F0A20)), TBtnInfo(Btn_User, 98, 1, (0x020001, 0x1C0010 | LPBlink4, 0x3F0A20))]
@@ -147,22 +147,22 @@ class TLaunchPadPro():
 		self.ColScaleT = bytearray(256) 
 		
 		self.LeftBtnColumnToggle = False
-		print('Lets goooooo')
+		#print('Lets goooooo')
 
 	def ResetBtnLastClip(self):
-		print('\nResetBtnLastClip func')
+		#print('\nResetBtnLastClip func')
 		for y in range(0, PadsW):
 			for x in range(0, PadsH):
 				self.BtnLastClip[x][y] = utils.TClipLauncherLastClip(MaxInt, MaxInt, MaxInt)
 
 	def ResetBtnMap(self, BtnMapObj, val):
-		print('\nResetBtnMap func')
+		#print('\nResetBtnMap func')
 		for y in range(0, PadsH):
 			for x in range(0, PadsW):
 				BtnMapObj[y][x] = val
 
 	def UpdateBlinking(self):  #check if any blinking button
-		# print('\nUpdateBlinking func')
+		# #print('\nUpdateBlinking func')
 		for y in range(0, PadsH):
 			for x in range(0, PadsW):
 				if self.BtnMap[y][x] > 1:
@@ -175,15 +175,15 @@ class TLaunchPadPro():
 			# print ('midi in sysex', len(event.sysex), event.sysex[0], event.sysex[1], event.sysex[2], event.sysex[3], event.sysex[4], event.sysex[5], event.sysex[6], event.sysex[7], event.sysex[8], event.sysex[9]) #, event.sysex[10], event.sysex[11], event.sysex[12], event.sysex[13], event.sysex[14], event.sysex[15], event.sysex[16])
 			#layout change
 			if (len(event.sysex) == 11) & (event.sysex[5] == 0x0C):
-				print('layout change')
+				#print('layout change')
 				self.CurLayout = event.sysex[7]
 			event.handled = True
 		else:
-			print('onmidiin else')
+			#print('onmidiin else')
 			event.handled = False
 
 	def Reset(self):
-		print('\nReset func')
+		#print('\nReset func')
 		self.ResetBtnMap(self.BtnMap, 0)
 		self.ResetBtnMap(self.AnimBtnMap, 0)
 		self.ResetBtnMap(self.ScreenCapBtnMap, 0)
@@ -191,16 +191,16 @@ class TLaunchPadPro():
 		self.ResetBtnLastClip()
 
 	def OnMidiMsg(self, event):
-		print('\n\nOnMidiMsg func')
+		#print('\n\nOnMidiMsg func')
 		print (event.status, event.data1, event.data2)
 		ColT = (0x000000, 0x2F0018 | LPBlink2)
 
 		if event.midiChan > 0:
-			print('OnMidiMsg - midiChan > 0')
+			#print('OnMidiMsg - midiChan > 0')
 			return
 		
 		if (event.data1 == Btn_Note):  # drums button
-			print('\nOnMidiMsg - drums (Note) clickd')
+			#print('\nOnMidiMsg - drums (Note) clickd')
 			event.handled = True
 			event.midiId = midi.MIDI_CONTROLCHANGE
 			
@@ -210,12 +210,12 @@ class TLaunchPadPro():
 			m = 150 + int(BlockPages) * 350 # faster in 1-pad increments
 			device.repeatMidiEvent(event, m, m)
 			if (event.data2 > 0) & (event.pmeFlags & midi.PME_System != 0):
-				print('OnMidiMsg - data2 > 0')
+				#print('OnMidiMsg - data2 > 0')
 				if (self.PrevClipOfs != -3):
-					print('OnMidiMsg - PrevClipOfs != -3')
+					#print('OnMidiMsg - PrevClipOfs != -3')
 					self.ClipOfs = -3
 				else:
-					print('OnMidiMsg - PrevClipOfs else')
+					#print('OnMidiMsg - PrevClipOfs else')
 					self.ClipOfs = -2
 				self.PrevClipOfs = self.ClipOfs
 				
@@ -232,7 +232,7 @@ class TLaunchPadPro():
 			return
 			
 		if (event.data1 == Btn_Custom):  # keys button
-			print('\nOnMidiMsg - Keys (Custom) clickd')
+			#print('\nOnMidiMsg - Keys (Custom) clickd')
 			event.handled = True
 			event.midiId = midi.MIDI_CONTROLCHANGE
 			
@@ -261,7 +261,7 @@ class TLaunchPadPro():
 			return
 			
 		if (event.data1 == Btn_CapMidi):  # user button
-			print('\nOnMidiMsg - USer (Capture Midi) cllickd')
+			#print('\nOnMidiMsg - USer (Capture Midi) cllickd')
 			event.handled = True
 			event.midiId = midi.MIDI_CONTROLCHANGE
 			
@@ -292,7 +292,7 @@ class TLaunchPadPro():
 			return
 			
 		if event.midiId == midi.MIDI_CHANAFTERTOUCH:
-			print('\nOnMidiMsg - midiId == midi.MIDI_CHANAFTERTOUCH')
+			#print('\nOnMidiMsg - midiId == midi.MIDI_CHANAFTERTOUCH')
 			event.midiId = midi.MIDI_CONTROLCHANGE
 			event.status = event.status & 0x0F | event.midiId
 			event.inEv = event.data1
@@ -311,7 +311,7 @@ class TLaunchPadPro():
 			return
 
 		elif event.midiId == midi.MIDI_KEYAFTERTOUCH:
-			print('\nOnMidiMsg - else midiId == midi.MIDI_KEYAFTERTOUCH')
+			#print('\nOnMidiMsg - else midiId == midi.MIDI_KEYAFTERTOUCH')
 			event.midiId = midi.MIDI_CONTROLCHANGE
 			event.status = event.status & 0x0F | event.midiId
 
@@ -353,83 +353,83 @@ class TLaunchPadPro():
 			return
 
 		elif event.midiId in [midi.MIDI_NOTEON, midi.MIDI_NOTEOFF, midi.MIDI_CONTROLCHANGE]: #All but Note, Custom, Capture MiDI
-			print('\nOnMidiMsg - SESSION ?? event.midiId in [midi.MIDI_NOTEON:   _NoteON:', event.midiId == midi.MIDI_NOTEON,'_NoteOFF:',event.midiId == midi.MIDI_NOTEOFF,'_ControlCHANGE:',event.midiId == midi.MIDI_CONTROLCHANGE)
+			#print('\nOnMidiMsg - SESSION ?? event.midiId in [midi.MIDI_NOTEON:   _NoteON:', event.midiId == midi.MIDI_NOTEON,'_NoteOFF:',event.midiId == midi.MIDI_NOTEOFF,'_ControlCHANGE:',event.midiId == midi.MIDI_CONTROLCHANGE)
 			if event.midiId == midi.MIDI_NOTEOFF:
-				print('OnMidiMsg - SESSION event.midiId == midi.MIDI_NOTEOFF')
+				#print('OnMidiMsg - SESSION event.midiId == midi.MIDI_NOTEOFF')
 				event.data2 = 0
 			elif (self.BtnT[Btn_VelLock] > 0) & (event.data2 > 0):
-				print('OnMidiMsg - SESSION (self.BtnT[Btn_VelLock] > 0) & (even')
+				#print('OnMidiMsg - SESSION (self.BtnT[Btn_VelLock] > 0) & (even')
 				event.data2 = 0x7F
 
 			y = event.data1 // PadsStride
 			x = event.data1 + 90 - y * PadsStride * 2 # top-down index
 			# system buttons
 			for n in range(1, len(BtnInfo)):
-				# print('\nOnMidiMsg - SESSION LOOP rolling')
+				# #print('\nOnMidiMsg - SESSION LOOP rolling')
 				if BtnInfo[n].Num == x:
-					print('OnMidiMsg - SESSION 00 BtnInfo[n].Num == x:',x)
+					#print('OnMidiMsg - SESSION 00 BtnInfo[n].Num == x:',x)
 					event.handled = True
 					m2 = self.BtnT[n]
 					if (m2 >= 2) & (event.data2 > 0):
-						print('OnMidiMsg - SESSION 01 (m2 >= 2) & (event.data')
+						#print('OnMidiMsg - SESSION 01 (m2 >= 2) & (event.data')
 						m = 0
 						m2 = 0
 					else:
-						print('OnMidiMsg - SESSION 02 (m2 >= 2) & (event.data ELSEE')
+						#print('OnMidiMsg - SESSION 02 (m2 >= 2) & (event.data ELSEE')
 						m = int(event.data2 > 0)
 						if (BtnInfo[n].Flags & 1 != 0) & (m > 0) & device.isDoubleClick(event.data1) & ((self.ClipOfs >= -1) | (n != 2)):
-							print('OnMidiMsg - SESSION BtnInfo[n].Flags & 1 != 0)')
+							#print('OnMidiMsg - SESSION BtnInfo[n].Flags & 1 != 0)')
 							m += 1
 
 					o = int(event.data2 > 0) * 2
 					if n == Btn_Play:
-						print('OnMidiMsg - SESSION n == Btn_Play')
+						#print('OnMidiMsg - SESSION n == Btn_Play')
 						#transport.globalTransport(midi.FPT_Play, o, event.pmeFlags)
 						device.midiOutSysex(bytes([0xF0, 0x00, 0x20, 0x29, 0x02, 0x0C, 0x00, 0x02, 0x00, 0x00, 0xF7]))
 						device.midiOutSysex(bytes([0xF0, 0x00, 0x20, 0x29, 0x02, 0x0C, 0x00, 0xF7]))
 					elif n == Btn_Stop:
-						print('OnMidiMsg - SESSION n == Btn_Stop')
+						#print('OnMidiMsg - SESSION n == Btn_Stop')
 						transport.globalTransport(midi.FPT_Stop, o, event.pmeFlags)
 					elif n == Btn_TapTempo:
-						print('OnMidiMsg - SESSION n == Btn_TapTempo')
+						#print('OnMidiMsg - SESSION n == Btn_TapTempo')
 						transport.globalTransport(midi.FPT_TapTempo, o, event.pmeFlags)
 					elif n == Btn_TempoNudgePlus:
-						print('OnMidiMsg - SESSION n == Btn_TempoNudgePlus')
+						#print('OnMidiMsg - SESSION n == Btn_TempoNudgePlus')
 						transport.globalTransport(midi.FPT_NudgePlus, o, event.pmeFlags)
 					elif n == Btn_TempoNudgeMin:
-						print('OnMidiMsg - SESSION n == Btn_TempoNudgeMin')
+						#print('OnMidiMsg - SESSION n == Btn_TempoNudgeMin')
 						transport.globalTransport(midi.FPT_NudgeMinus, o, event.pmeFlags)
 					if (m > 0) | (m2 <= 1):
-						print('OnMidiMsg - SESSION 03 (m > 0) | (m2 <= 1)')
+						#print('OnMidiMsg - SESSION 03 (m > 0) | (m2 <= 1)')
 						self.SetBtn(n, m)
 					if (n == 2) & (self.ClipOfs < -1) & (event.data2 > 0):
-						print('OnMidiMsg - SESSION 04 (n == 2) & (self.ClipOfs < -1) & (event.data2 > 0)')
+						#print('OnMidiMsg - SESSION 04 (n == 2) & (self.ClipOfs < -1) & (event.data2 > 0)')
 						launchMapPages.releaseMapItem(event, -self.ClipOfs - 2)
 					return
 			#system
 			# track offset
 			if (event.data1 == Btn_Up) | (event.data1 == Btn_Down):
-				print('\nOnMidiMsg - track offset UP or DOWN')
+				#print('\nOnMidiMsg - track offset UP or DOWN')
 				if (event.data1 == Btn_Up):
-					print('OnMidiMsg - track Btn_Up')
+					#print('OnMidiMsg - track Btn_Up')
 					a = 0
 				else:	
-					print('OnMidiMsg - track Btn_Down')
+					#print('OnMidiMsg - track Btn_Down')
 					a = 1
 				event.handled = True
 				BlockPages = (self.BtnT[Btn_Overview] > 0) | self.BlockOfs
 				m = 150 + int(BlockPages) * 350 # faster in 1-pad increments
 				device.repeatMidiEvent(event, m, m)
 				if (event.data2 > 0) & (event.pmeFlags & midi.PME_System != 0):
-					print('OnMidiMsg - track event.data2 > 0) & (event.pmeFlags & midi.PME_System')
+					#print('OnMidiMsg - track event.data2 > 0) & (event.pmeFlags & midi.PME_System')
 					m = a * 2 - 1
 					if BlockPages:
-						print('OnMidiMsg - track BlockPages')
+						#print('OnMidiMsg - track BlockPages')
 						m = m * OverH
 					self.SetOfs(self.TrackOfs + m, self.ClipOfs)
 					self.BtnT[Btn_Overview] = int(self.BtnT[Btn_Overview] > 0) * 2 # so that session btn works as held
 					if self.ClipOfs >= 0:
-						print('OnMidiMsg - track self.ClipOfs >= 0')
+						#print('OnMidiMsg - track self.ClipOfs >= 0')
 						self.ClipOfsPerfomance = self.ClipOfs
 					self.TrackOfsPerfomance = self.TrackOfs
 				self.ArrowT[a] = event.data2
@@ -439,38 +439,38 @@ class TLaunchPadPro():
 
 			# clip offset
 			elif (event.data1 == Btn_Left) | (event.data1 == Btn_Right):
-				print('\nOnMidiMsg - clipoofset L or R')
+				#print('\nOnMidiMsg - clipoofset L or R')
 				a = event.data1 - Btn_Left
 				event.handled = True
 				BlockPages = (self.BtnT[Btn_Overview] > 0) | self.BlockOfs
 				m = 150 + int(BlockPages) * 350 # faster in 1-pad increments
 				device.repeatMidiEvent(event, m, m)
 				if (event.data2 > 0) & (event.pmeFlags & midi.PME_System != 0):
-					print('OnMidiMsg - clip data2 > 0')
+					#print('OnMidiMsg - clip data2 > 0')
 					m = (a) * 2 - 1
 					if self.ClipOfs >= 0:
-						print('OnMidiMsg - clip clipOfs >= 0')
+						#print('OnMidiMsg - clip clipOfs >= 0')
 						if (self.ClipOfs == 0) & (m == -1):
-							print('OnMidiMsg - clip self.ClipOfs == 0) & (m == -1 SWITCHED TO NEW PAGE')
+							#print('OnMidiMsg - clip self.ClipOfs == 0) & (m == -1 SWITCHED TO NEW PAGE')
 							o = -1
 						else:
-							print('OnMidiMsg - clip elsezz')
+							#print('OnMidiMsg - clip elsezz')
 							if BlockPages:
-								print('OnMidiMsg - clip BlockPages')
+								#print('OnMidiMsg - clip BlockPages')
 								m = m * OverW
 							o = max(self.ClipOfs + m, 0)
 					else:
-						print('OnMidiMsg - clip self.ClipOfs < 0')
+						#print('OnMidiMsg - clip self.ClipOfs < 0')
 						o = self.ClipOfs + m
 					self.SetOfs(self.TrackOfs, o)
 					self.BtnT[Btn_Overview] = int(self.BtnT[Btn_Overview] > 0) * 2 # so that session btn works as held
 					self.TrackOfsPerfomance = self.TrackOfs
 					if self.ClipOfs >= 0:
-						print('OnMidiMsg - clip still ClipOfs >= 0')
+						#print('OnMidiMsg - clip still ClipOfs >= 0')
 						self.ClipOfsPerfomance = self.ClipOfs
 					self.PrevClipOfs = self.ClipOfs
 					if self.ClipOfs <= 0:
-						print('OnMidiMsg - clip well ClipOfs <= 0')
+						#print('OnMidiMsg - clip well ClipOfs <= 0')
 						device.stopRepeatMidiEvent()
 				self.ArrowT[2 + a] = event.data2
 				
@@ -479,14 +479,14 @@ class TLaunchPadPro():
 				playlist.lockDisplayZone(1 + a, event.data2 > 0)
 				return
 			elif (event.data1 == Btn_Overview):  # overview
-				print('\nOnMidiMsg - overview event.data1 == Btn_Overview)')
+				#print('\nOnMidiMsg - overview event.data1 == Btn_Overview)')
 				event.handled = True
 				if (event.pmeFlags & midi.PME_System != 0):
 					if event.data2 > 0:
-						print('OnMidiMsg - overview event.data2 > 0')
+						#print('OnMidiMsg - overview event.data2 > 0')
 						self.SetBtn(Btn_Overview, int(self.BtnT[Btn_Overview] > 0) ^ 1)
 					elif self.BtnT[Btn_Overview] == 2:
-						print('OnMidiMsg - overview self.BtnT[Btn_Overview] == 2:')
+						#print('OnMidiMsg - overview self.BtnT[Btn_Overview] == 2:')
 						self.SetBtn(Btn_Overview, 0)
 				return
 			
@@ -505,36 +505,36 @@ class TLaunchPadPro():
 				# 			self.LeftBtnColumnToggle = True
 				return
 			elif (event.data1 == Btn_SpareHex): # spare state
-				print('\nOnMidiMsg - spare st (event.data1 == Btn_SpareHex')
+				#print('\nOnMidiMsg - spare st (event.data1 == Btn_SpareHex')
 				event.handled = True
 				if (event.pmeFlags & midi.PME_System != 0):
-					print('OnMidiMsg - spare st (event.pmeFlags & midi.PME_System != 0)')
+					#print('OnMidiMsg - spare st (event.pmeFlags & midi.PME_System != 0)')
 					if event.data2 > 0:
-						print('OnMidiMsg - spare stevent.data2 > 0')
+						#print('OnMidiMsg - spare stevent.data2 > 0')
 						self.SetBtn(Btn_Spare, int(event.data2 > 0))
 				return
 			
 			elif ((event.data1 >= Btn_SpareHex) & (event.data1 <= 0x7F)) | (event.data1 in	[0x0A, 0x14, 0x1E, 0x28, 0x32, 0x3C, 0x46, 0x50]):
-				print('\n----------------OnMidiMsg - elif ((event.data1 >= Btn_SpareHex) & (event.data1 <= ', 0x63 == Btn_SpareHex)
+				#print('\n----------------OnMidiMsg - elif ((event.data1 >= Btn_SpareHex) & (event.data1 <= ', 0x63 == Btn_SpareHex)
 				return
 
 			# live mode
 			x = event.data1 - y * PadsStride - ClipsX
 			y = ClipsH - ClipsY - y
 			if (x >= PadsW) | (y >= PadsH):
-				print('\nOnMidiMsg - Live x >= PadsW) | (y >= Pad')
+				#print('\nOnMidiMsg - Live x >= PadsW) | (y >= Pad')
 				return
 
 			# clip release safety
 			if event.data2 == 0:
-				print('OnMidiMsg - Clip release safely event.data2 == ')
+				#print('OnMidiMsg - Clip release safely event.data2 == ')
 				if self.BtnLastClip[y][x].TrackNum != MaxInt:
-					print('OnMidiMsg - Clip release safely 00 BtnLastClip[y][x].TrackNum != MaxInt')
+					#print('OnMidiMsg - Clip release safely 00 BtnLastClip[y][x].TrackNum != MaxInt')
 					if (event.pmeFlags & midi.PME_System_Safe != 0):
-						print('OnMidiMsg - Clip release safely 001 pmeFlags & midi.PME_System_Safe != 0')
+						#print('OnMidiMsg - Clip release safely 001 pmeFlags & midi.PME_System_Safe != 0')
 						playlist.triggerLiveClip(self.BtnLastClip[y][x].TrackNum, self.BtnLastClip[y][x].SubNum, self.BtnLastClip[y][x].Flags | midi.TLC_Release)
 					if self.BtnLastClip[y][x].TrackNum == 0:
-						print('OnMidiMsg - Clip release safely 002 elf.BtnLastClip[y][x].TrackNum == 0')
+						#print('OnMidiMsg - Clip release safely 002 elf.BtnLastClip[y][x].TrackNum == 0')
 						self.BtnMap[SClipsY + y][SClipsX + x] = ColT[0]
 						self.FullRefresh_Btn
 
@@ -543,7 +543,7 @@ class TLaunchPadPro():
 					return
 
 			if self.BtnT[Btn_Overview] > 0:
-				print('\nOnMidiMsg - Overview PICK self.BtnT[Btn_Overview] > 0')
+				#print('\nOnMidiMsg - Overview PICK self.BtnT[Btn_Overview] > 0')
 				# overview pick
 				if event.data2 > 0:
 					if y < OverH - 1:
@@ -557,44 +557,44 @@ class TLaunchPadPro():
 					self.SetBtn(Btn_Overview, 0)
 				event.handled = True
 			else:
-				print('\nOnMidiMsg - Overview PICK else 00')
+				#print('\nOnMidiMsg - Overview PICK else 00')
 				if self.ClipOfs < -1:
-					print('OnMidiMsg - Overview PICK else 001 - custom pg')
+					#print('OnMidiMsg - Overview PICK else 001 - custom pg')
 					# custom pages
 					x2 = y * LayW + x
 					m = -self.ClipOfs - 2
 					if x2 <= launchMapPages.getMapCount(m):
-						print('OnMidiMsg - Overview PICK 0010 x2<= launchmappages')
+						#print('OnMidiMsg - Overview PICK 0010 x2<= launchmappages')
 						o = launchMapPages.getMapItemChannel(m, x2)
 						if o > -128:
-							print('OnMidiMsg - Overview PICK else 00100 > -128')
+							#print('OnMidiMsg - Overview PICK else 00100 > -128')
 							m2 = event.data2
 							if (m2 == 0) & (self.BtnT[Btn_ScenePlus] > 0):
-								print('OnMidiMsg - Overview PICK 001000 m2 === 0 & Btn_sceneplus')
+								#print('OnMidiMsg - Overview PICK 001000 m2 === 0 & Btn_sceneplus')
 								m2 = -MaxInt # user1=hold
 							launchMapPages.processMapItem(event, m, x2, m2)
 				else:
-					print('OnMidiMsg - Overview PICK else 002 NOT custom pg')
+					#print('OnMidiMsg - Overview PICK else 002 NOT custom pg')
 					if self.ClipOfs >= 0:
-						print('OnMidiMsg - Overview PICK else 0020 1st change')
+						#print('OnMidiMsg - Overview PICK else 0020 1st change')
 						# first chance
 						launchMapPages.processMapItem(event, -1, y * PadsW + x, event.data2)
 						self.ClipOfsPerfomance = self.ClipOfs
 						if event.handled:
-							print('OnMidiMsg - Overview PICK else 00201 handled')
+							#print('OnMidiMsg - Overview PICK else 00201 handled')
 							return
 
 					if (event.pmeFlags & midi.PME_System_Safe != 0):
-						print('OnMidiMsg - Overview PICK else 0021 event.pmeFlags & midi.PME_System_Safe != 0)')
+						#print('OnMidiMsg - Overview PICK else 0021 event.pmeFlags & midi.PME_System_Safe != 0)')
 						x2 = x
 						y2 = y + self.TrackOfs + 1
 						if self.ClipOfs >= 0:
 							if event.data2 > 0:
-								print('OnMidiMsg - Overview PICK else 002101 lunch clip')
+								#print('OnMidiMsg - Overview PICK else 002101 lunch clip')
 								# clip launch
 								m = midi.TLC_MuteOthers | midi.TLC_Fill
 								if y >= SceneY:
-									print('OnMidiMsg - Overview PICK else scene Y')
+									#print('OnMidiMsg - Overview PICK else scene Y')
 									y2 = 0
 									m = m | midi.TLC_ColumnMode # column mode
 
@@ -640,7 +640,7 @@ class TLaunchPadPro():
 			event.handled = False
 
 	def OnMidiOutMsg(self, event):
-		print('\n\nOnMidiOutMsg func')
+		#print('\n\nOnMidiOutMsg func')
 
 		print (event.status, event.data1, event.data2)
 		event.handled = True
@@ -700,7 +700,7 @@ class TLaunchPadPro():
 			event.handled = False
 
 	def OnDoFullRefresh(self):
-		# print('\n\nOnDoFullRefresh func')
+		# #print('\n\nOnDoFullRefresh func')
 		TempBtnMap = [[0 for x in range(PadsW)] for y in range(PadsH + 1)]
 		TempAnimBtnMap = [[0 for x in range(PadsW)] for y in range(PadsH + 1)]
 
@@ -770,9 +770,9 @@ class TLaunchPadPro():
 				for y in range(7, len(s)):
 					sf = sf + str(s[y]) + ', '
 					if (y - 6) % 5 == 0:
-						print(sf)
+						#print(sf)
 						sf = ''
-				print('---------------------')
+				#print('---------------------')
 				'''
 
 			# backup
@@ -781,17 +781,17 @@ class TLaunchPadPro():
 					self.OldBtnMap[y][x] = TempBtnMap[y][x]
 
 	def FullRefresh_Btn(self):
-		# print('\n\nFullRefresh_Btn func')
+		# #print('\n\nFullRefresh_Btn func')
 		if (self.BtnMapMode < 2) & (self.BtnMapModeRefCount == 0):
 			device.fullRefresh()
 
 	def FullRefresh_Anim(self):
-		print('\n\nFullRefresh_Anim func')
+		#print('\n\nFullRefresh_Anim func')
 		if ((self.BtnMapMode > 0) & (self.BtnMapMode < 3)) | (self.BtnMapModeRefCount != 0):
 			device.fullRefresh()
 
 	def SetOfs(self, SetTrackOfs, SetClipOfs):
-		print('\n\nSetOfs func')
+		#print('\n\nSetOfs func')
 		Col1 = 0x010900
 		Col2 = 0x090100
 
@@ -822,21 +822,21 @@ class TLaunchPadPro():
 			self.OnDisplayZone()
 
 	def OnDisplayZone(self):
-		print('\n\nOnDisplayZone func')
+		#print('\n\nOnDisplayZone func')
 		if (self.ClipOfs >= 0) & (playlist.getDisplayZone() != 0):
 			playlist.liveDisplayZone(self.ClipOfs, self.TrackOfs + 1, self.ClipOfs + PadsW - 1, self.TrackOfs + 1 + PadsH)
 		else:
 			playlist.liveDisplayZone(-1, -1, -1, -1)
 
 	def CheckSpecialSwitches(self):
-		print('CheckSpecialSwitches func')
+		#print('CheckSpecialSwitches func')
 		if (self.ArrowT[0] + self.ArrowT[1] + self.ArrowT[2] + self.ArrowT[3]) >= 0x7F * 4:
 			self.BlockOfs = not self.BlockOfs
 			self.SetOfs(0, 0)
 			device.stopRepeatMidiEvent()
 
 	def SetBtn(self, Index, Value):
-		print('\n\nSetBtn func')
+		#print('\n\nSetBtn func')
 		self.BtnT[Index] = Value
 
 		v = BtnInfo[Index].Col[utils.Limited(Value, 0, 2)]
@@ -860,7 +860,7 @@ class TLaunchPadPro():
 			playlist.lockDisplayZone(0, Value > 0)
 		
 	def OnIdle(self):
-		# print('\n\nOnIdle func')
+		# #print('\n\nOnIdle func')
 		BlinkSpeed = 0x20
 
 		if device.isAssigned():
@@ -886,7 +886,7 @@ class TLaunchPadPro():
 
 			if not self.NoFullRefresh:
 				if self.BtnMapMode == 3:
-					print('time to full refr')
+					#print('time to full refr')
 					self.FullRefresh_Btn()
 
 				self.BlinkLight = round(v2 * v2 * 256)
@@ -906,14 +906,14 @@ class TLaunchPadPro():
 						self.UpdateBlinking()
 
 	def OnRefresh(self, flags):
-		# print('\n\nOnRefresh func')
+		# #print('\n\nOnRefresh func')
 		if flags & midi.HW_Dirty_RemoteLinks != 0:
 			if self.ClipOfs < -1:
 				self.SetOfs(self.TrackOfs, self.ClipOfs)
 			launchMapPages.updateMap(-1)
 
 	def SwitchLedsOff(self):
-		print('\n\nSwitchLedsOff func')
+		#print('\n\nSwitchLedsOff func')
 		t = (0x030C02292000F0).to_bytes(7 + 3 * MaxPads, byteorder='little')
 		s = bytearray(t)
 		m = 7
@@ -932,12 +932,12 @@ class TLaunchPadPro():
 		device.midiOutSysex(bytes(s))
 
 	def OnSysEx(self, event):
-		print('\n\nOnSysEx func')
+		#print('\n\nOnSysEx func')
 		print('onSysex', event.sysex, event.senderId)
 
 
 	def OnInit(self):
-		print('\n\nOnInit func')
+		#print('\n\nOnInit func')
 		NameStr = 'Novation Launchpad X'
 
 		for n in range(0, len(self.ColScaleT)):
@@ -954,7 +954,7 @@ class TLaunchPadPro():
 		if device.isAssigned():
 			device.midiOutSysex(bytes([0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7]))
 			# set programmer mode
-			device.midiOutSysex(bytes([0xF0, 0x00, 0x20, 0x29, 0x02, 0x0C, 0x0E, 0x01, 0xF7]))
+			device.midiOutSysex(bytes([0xF0, 0x00, 0x20, 0x29, 0x02, 0x0D, 0x0E, 0x01, 0xF7]))
 			# switch off all LEDs
 			self.SwitchLedsOff()
 			self.CurLayout = 3
@@ -970,7 +970,7 @@ class TLaunchPadPro():
 		self.SetOfs(self.TrackOfs, self.ClipOfs)
 
 	def OnDeInit(self):
-		print('\n\nOnDeInit func')
+		#print('\n\nOnDeInit func')
 		device.destroyRefreshThread()
 		self.Reset()
 
@@ -981,7 +981,7 @@ class TLaunchPadPro():
 			device.midiOutSysex(bytes([0xF0, 0x00, 0x20, 0x29, 0x02, 0x0C, 0x0E, 0x00, 0xF7]))
 
 	def FixColor(self, Color):
-		print('\n\nFixColor func')
+		#print('\n\nFixColor func')
 		r, g, b = utils.ColorToRGB(Color)
 		r = self.ColScaleT[r]
 		g = self.ColScaleT[g]
@@ -992,7 +992,7 @@ class TLaunchPadPro():
 		return utils.RGBToColor(r, g, b)
 
 	def OnUpdateLiveMode(self, LastTrackNum):
-		print('\n\nOnUpdateLiveMode func')
+		#print('\n\nOnUpdateLiveMode func')
 		FirstTrackNum = 1
 		StatusColT = [0, 0, 0, 0]
 		LoopBtnColT = (0x3F0000, 0x002400, 0x000110, 0x000228, 0x00033F, 0x180018, 0x3F003F)
@@ -1113,110 +1113,76 @@ class TLaunchPadPro():
 LaunchPadPro = TLaunchPadPro()
 
 def OnInit():
-	print('initoo')
+	#print('initoo')
 	LaunchPadPro.OnInit()
 
 def OnDeInit():
-	print('deinitoo')
+	#print('deinitoo')
 	LaunchPadPro.OnDeInit()
 
 def OnMidiMsg(event):
-	print('midi in msg')
+	#print('midi in msg')
 	LaunchPadPro.OnMidiMsg(event)
 
 def OnMidiOutMsg(event):
-	print('midi o msg')
+	#print('midi o msg')
 	LaunchPadPro.OnMidiOutMsg(event)
 
 def OnDoFullRefresh():
-	# print('full refr')
+	# #print('full refr')
 	LaunchPadPro.OnDoFullRefresh()
 
 def OnDisplayZone():
-	print('displ zon')
+	#print('displ zon')
 	LaunchPadPro.OnDisplayZone()
 
 def OnIdle():
-	# print('idle')
+	# #print('idle')
 	LaunchPadPro.OnIdle()
 
 def OnRefresh(Flags):
-	print('refr')
+	#print('refr')
 	LaunchPadPro.OnRefresh(Flags)
 
 def OnUpdateLiveMode(LastTrackNum):
-	print('up  live')
+	#print('up  live')
 	LaunchPadPro.OnUpdateLiveMode(LastTrackNum)
 
 def OnMidiIn(event):
-	print('\n\nBEGIN-----')
+	#print('\n\nBEGIN-----')
 	data = event.data1
-	print('presssed w data1:', data, '  -->', hex(data))
-	if data  == Btn_Up:
-		print('presssed Btn_Up')
-	elif data == Btn_Down:
-		print('presssed Btn_Down')
-	elif data == Btn_Left:
-		print('presssed Btn_Left')
-	elif data == Btn_Right:
-		print('presssed Btn_Right')
-	elif data == Btn_Session:
-		print('presssed Btn_Session')
-	elif data == Btn_Note:
-		print('presssed Btn_Note')
-	elif data == Btn_Custom:
-		print('presssed Btn_Custom')
-	elif data == Btn_CapMidi:
-		print('presssed Btn_CapMidi')
-	elif data == Btn_SpareHex:
-		print('presssed Btn_SpareHex')
-	elif data == Btn_Volume:
-		print('presssed Btn_Volume')
-	elif data == Btn_Pan:
-		print('presssed Btn_Pan')
-	elif data == Btn_SendA:
-		print('presssed Btn_Btn_SendA')
-	elif data == Btn_SendB:
-		print('presssed Btn_SendB')
-	elif data == Btn_StopClip:
-		print('presssed Btn_StopClip')
-	elif data == Btn_Mute:
-		print('presssed Btn_Mute')
-	elif data == Btn_Solo:
-		print('presssed Btn_Solo')
-	elif data == Btn_RecordArm:
-		print('presssed Btn_RecordArm')
-	# print('getting midiooo:',event)
-	# print('controlNum:',event.controlNum)
-	# print('controlVal:',event.controlVal)
-	# print('data1:',event.data1)
-	# print('data2:',event.data2)
-	# print('handled:',event.handled)
-	# print('inEv:',event.inEv)
-	# print('isIncrement:',event.isIncrement)
-	# print('midiChan:',event.midiChan)
-	# print('midiChanEx:',event.midiChanEx)
-	# print('midiId:',event.midiId)
-	# print('note:',event.note)
-	# print('outEv:',event.outEv)
-	# print('pitchBend:',event.pitchBend)
-	# print('pmeFlags:',event.pmeFlags)
-	# print('port:',event.port)
-	# print('pressure:',event.pressure)
-	# print('progNum:',event.progNum)
-	# print('res:',event.res)
-	# print('senderId:',event.senderId)
-	# print('status:',event.status)
-	# print('sysex:',event.sysex)
-	# print('timestamp:',event.timestamp)
-	# print('velocity:',event.velocity)
-	# print('write:',event.write)
+	#print('presssed w data1:', data, '  -->', hex(data))
+	# #print('getting midiooo:',event)
+	# #print('controlNum:',event.controlNum)
+	# #print('controlVal:',event.controlVal)
+	# #print('data1:',event.data1)
+	# #print('data2:',event.data2)
+	# #print('handled:',event.handled)
+	# #print('inEv:',event.inEv)
+	# #print('isIncrement:',event.isIncrement)
+	# #print('midiChan:',event.midiChan)
+	# #print('midiChanEx:',event.midiChanEx)
+	# #print('midiId:',event.midiId)
+	# #print('note:',event.note)
+	# #print('outEv:',event.outEv)
+	# #print('pitchBend:',event.pitchBend)
+	# #print('pmeFlags:',event.pmeFlags)
+	# #print('port:',event.port)
+	# #print('pressure:',event.pressure)
+	# #print('progNum:',event.progNum)
+	# #print('res:',event.res)
+	# #print('senderId:',event.senderId)
+	# #print('status:',event.status)
+	# #print('sysex:',event.sysex)
+	# #print('timestamp:',event.timestamp)
+	# #print('velocity:',event.velocity)
+	# #print('write:',event.write)
 	
 	LaunchPadPro.OnMidiIn(event)
-	print('END-----\n')
+	#print('END-----\n')
 
 def OnSysEx(event):
-	print('syeEX')
+	#print('syeEX')
 	LaunchPadPro.OnSysEx(event)
 
 
