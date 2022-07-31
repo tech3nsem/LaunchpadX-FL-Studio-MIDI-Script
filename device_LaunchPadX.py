@@ -172,9 +172,9 @@ class TLaunchPadPro():
 	def OnMidiIn(self, event):
 		print ('\nOnMidiIn func', event.status )
 		if event.status == midi.MIDI_BEGINSYSEX:
-			print ('midi in sysex', len(event.sysex), event.sysex[0], event.sysex[1], event.sysex[2], event.sysex[3], event.sysex[4], event.sysex[5], event.sysex[6], event.sysex[7], event.sysex[8], event.sysex[9]) #, event.sysex[10], event.sysex[11], event.sysex[12], event.sysex[13], event.sysex[14], event.sysex[15], event.sysex[16])
+			# print ('midi in sysex', len(event.sysex), event.sysex[0], event.sysex[1], event.sysex[2], event.sysex[3], event.sysex[4], event.sysex[5], event.sysex[6], event.sysex[7], event.sysex[8], event.sysex[9]) #, event.sysex[10], event.sysex[11], event.sysex[12], event.sysex[13], event.sysex[14], event.sysex[15], event.sysex[16])
 			#layout change
-			if (len(event.sysex) == 11) & (event.sysex[5] == 0x0D):
+			if (len(event.sysex) == 11) & (event.sysex[5] == 0x0C):
 				print('layout change')
 				self.CurLayout = event.sysex[7]
 			event.handled = True
@@ -353,7 +353,7 @@ class TLaunchPadPro():
 			return
 
 		elif event.midiId in [midi.MIDI_NOTEON, midi.MIDI_NOTEOFF, midi.MIDI_CONTROLCHANGE]: #All but Note, Custom, Capture MiDI
-			print('\nOnMidiMsg - SESSION ?? event.midiId in [midi.MIDI_NOTEON:   _NoteON:', event.midiId == midi.MIDI_NOTEON,'_NoteOFF:',event.midiId == midi.MIDI_NOTEOFF,'_ControlCHANGE:',event.midiId == midi.MIDI_CONTROLCHANGE, )
+			print('\nOnMidiMsg - SESSION ?? event.midiId in [midi.MIDI_NOTEON:   _NoteON:', event.midiId == midi.MIDI_NOTEON,'_NoteOFF:',event.midiId == midi.MIDI_NOTEOFF,'_ControlCHANGE:',event.midiId == midi.MIDI_CONTROLCHANGE)
 			if event.midiId == midi.MIDI_NOTEOFF:
 				print('OnMidiMsg - SESSION event.midiId == midi.MIDI_NOTEOFF')
 				event.data2 = 0
@@ -385,8 +385,8 @@ class TLaunchPadPro():
 					if n == Btn_Play:
 						print('OnMidiMsg - SESSION n == Btn_Play')
 						#transport.globalTransport(midi.FPT_Play, o, event.pmeFlags)
-						device.midiOutSysex(bytes([0xF0, 0x00, 0x20, 0x29, 0x02, 0x0D, 0x00, 0x02, 0x00, 0x00, 0xF7]))
-						device.midiOutSysex(bytes([0xF0, 0x00, 0x20, 0x29, 0x02, 0x0D, 0x00, 0xF7]))
+						device.midiOutSysex(bytes([0xF0, 0x00, 0x20, 0x29, 0x02, 0x0C, 0x00, 0x02, 0x00, 0x00, 0xF7]))
+						device.midiOutSysex(bytes([0xF0, 0x00, 0x20, 0x29, 0x02, 0x0C, 0x00, 0xF7]))
 					elif n == Btn_Stop:
 						print('OnMidiMsg - SESSION n == Btn_Stop')
 						transport.globalTransport(midi.FPT_Stop, o, event.pmeFlags)
@@ -886,7 +886,8 @@ class TLaunchPadPro():
 
 			if not self.NoFullRefresh:
 				if self.BtnMapMode == 3:
-					FullRefresh
+					print('time to full refr')
+					self.FullRefresh_Btn()
 
 				self.BlinkLight = round(v2 * v2 * 256)
 				if (self.BtnMap[0][3] != c) | (self.BtnMap[0][PadsW - 1] != c):
@@ -937,7 +938,7 @@ class TLaunchPadPro():
 
 	def OnInit(self):
 		print('\n\nOnInit func')
-		NameStr = 'Novation Launchpad Pro'
+		NameStr = 'Novation Launchpad X'
 
 		for n in range(0, len(self.ColScaleT)):
 			v = n / 255
@@ -953,7 +954,7 @@ class TLaunchPadPro():
 		if device.isAssigned():
 			device.midiOutSysex(bytes([0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7]))
 			# set programmer mode
-			device.midiOutSysex(bytes([0xF0, 0x00, 0x20, 0x29, 0x02, 0x0D, 0x0E, 0x01, 0xF7]))
+			device.midiOutSysex(bytes([0xF0, 0x00, 0x20, 0x29, 0x02, 0x0C, 0x0E, 0x01, 0xF7]))
 			# switch off all LEDs
 			self.SwitchLedsOff()
 			self.CurLayout = 3
@@ -977,7 +978,7 @@ class TLaunchPadPro():
 			if self.CurLayout == 3:
 				self.SwitchLedsOff()
 			# set b   ack to live mode
-			device.midiOutSysex(bytes([0xF0, 0x00, 0x20, 0x29, 0x02, 0x0D, 0x0E, 0x00, 0xF7]))
+			device.midiOutSysex(bytes([0xF0, 0x00, 0x20, 0x29, 0x02, 0x0C, 0x0E, 0x00, 0xF7]))
 
 	def FixColor(self, Color):
 		print('\n\nFixColor func')
