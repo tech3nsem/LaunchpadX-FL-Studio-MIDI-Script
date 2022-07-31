@@ -1,0 +1,81 @@
+    Jog               0     (jog) generic jog (can be used to select stuff)
+    Jog2              1     (jog) alternate generic jog (can be used to relocate stuff)
+
+    Previous          5     (button)
+    Next              6     (button)
+    PreviousNext      7     (jog) generic track selection
+    MoveJog           8     (jog) used to relocate items
+
+    Play              10    (button) play/pause
+    Stop              11    (button)
+    Record            12    (button)
+    Rewind            13    (hold)
+    FastForward       14    (hold)
+    Loop              15    (button) (switch between pattern and song mode)
+    Mute              16    (button)
+    Mode              17    (button) generic or record mode
+
+    Undo              20    (button) undo/redo last, or undo down in history
+    UndoUp            21    (button) undo up in history
+    UndoJog           22    (jog) undo in history
+
+    Punch             30    (hold) live selection
+    PunchIn           31    (button)
+    PunchOut          32    (button)
+    AddMarker         33    (button)
+    AddAltMarker      34    (button) add alternate marker
+    MarkerJumpJog     35    (jog) marker jump
+    MarkerSelJog      36    (jog) marker selection
+
+    Up                40    (button)
+    Down              41    (button)
+    Left              42    (button)
+    Right             43    (button)
+    HZoomJog          44    (jog)
+    VZoomJog          45    (jog)
+    Snap              48    (button) snap on/off
+    SnapMode          49    (jog) snap mode
+
+    Cut               50    (button)
+    Copy              51    (button)
+    Paste             52    (button)
+    Insert            53    (button)
+    Delete            54    (button)
+    NextWindow        58    (button) TAB
+    WindowJog         59    (jog) window selection
+
+    F1                60    (button)
+    F2                61    (button)
+    F3                62    (button)
+    F4                63    (button)
+    F5                64    (button)
+    F6                65    (button)
+    F7                66    (button)
+    F8                67    (button)
+    F9                68    (button)
+    F10               69   (button)
+
+    Enter             80    (button) enter/accept
+    Escape            81    (button) escape/cancel
+    Yes               82    (button) yes
+    No                83    (button) no
+
+    Menu              90    (button) generic menu
+    ItemMenu          91    (button) item edit/tool/contextual menu
+    Save              92    (button)
+    SaveNew           93    (button) save as new version
+
+    PatternJog        100   (jog) pattern
+    TrackJog          101   (jog) mixer track
+    ChannelJog        102   (jog) channel
+
+    TempoJog          105   (jog) tempo (in 0.1BPM increments)
+    TapTempo          106   (button) tempo tapping
+    NudgeMinus        107   (hold) tempo nudge -
+    NudgePlus         108   (hold) tempo nudge +
+
+    Metronome         110   (button) metronome
+    WaitForInput      111   (button) wait for input to start playing
+    Overdub           112   (button) overdub recording
+    LoopRecord        113   (button) loop recording
+    StepEdit          114   (button) step edit mode
