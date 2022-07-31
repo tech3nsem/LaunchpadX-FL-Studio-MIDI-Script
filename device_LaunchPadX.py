@@ -58,7 +58,7 @@ Btn_Note = 0x60
 Btn_Custom = 0x61
 Btn_CapMidi = 0x62
 
-Btn_Spare = 0x63
+Btn_SpareHex = 0x63
 Btn_Volume = 0x59
 Btn_Pan = 0x4F
 Btn_SendA = 0x45
@@ -504,8 +504,8 @@ class TLaunchPadPro():
 				# 				BtnInfo[n].Num	= LeftBtnInfo[n].Num
 				# 			self.LeftBtnColumnToggle = True
 				return
-			elif (event.data1 == Btn_Spare): # spare state
-				print('\nOnMidiMsg - spare st (event.data1 == Btn_Spare')
+			elif (event.data1 == Btn_SpareHex): # spare state
+				print('\nOnMidiMsg - spare st (event.data1 == Btn_SpareHex')
 				event.handled = True
 				if (event.pmeFlags & midi.PME_System != 0):
 					print('OnMidiMsg - spare st (event.pmeFlags & midi.PME_System != 0)')
@@ -513,9 +513,9 @@ class TLaunchPadPro():
 						print('OnMidiMsg - spare stevent.data2 > 0')
 						self.SetBtn(Btn_Spare, int(event.data2 > 0))
 				return
-
-			elif ((event.data1 >= Btn_Spare) & (event.data1 <= 0x7F)) | (event.data1 in	[0x0A, 0x14, 0x1E, 0x28, 0x32, 0x3C, 0x46, 0x50]):
-				print('\nOnMidiMsg - elif ((event.data1 >= Btn_Spare) & (event.data1 <= ')
+			
+			elif ((event.data1 >= Btn_SpareHex) & (event.data1 <= 0x7F)) | (event.data1 in	[0x0A, 0x14, 0x1E, 0x28, 0x32, 0x3C, 0x46, 0x50]):
+				print('\n----------------OnMidiMsg - elif ((event.data1 >= Btn_SpareHex) & (event.data1 <= ', 0x63 == Btn_SpareHex)
 				return
 
 			# live mode
@@ -1151,7 +1151,7 @@ def OnUpdateLiveMode(LastTrackNum):
 def OnMidiIn(event):
 	print('\n\nBEGIN-----')
 	data = event.data1
-	print('presssed w data1:', data)
+	print('presssed w data1:', data, '  -->', hex(data))
 	if data  == Btn_Up:
 		print('presssed Btn_Up')
 	elif data == Btn_Down:
@@ -1168,8 +1168,8 @@ def OnMidiIn(event):
 		print('presssed Btn_Custom')
 	elif data == Btn_CapMidi:
 		print('presssed Btn_CapMidi')
-	elif data == Btn_Spare:
-		print('presssed Btn_Spare')
+	elif data == Btn_SpareHex:
+		print('presssed Btn_SpareHex')
 	elif data == Btn_Volume:
 		print('presssed Btn_Volume')
 	elif data == Btn_Pan:
